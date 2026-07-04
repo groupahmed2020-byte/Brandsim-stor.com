@@ -10,23 +10,27 @@
 </head>
 <body class="bg-gray-50 text-gray-800 dark:bg-gray-950 dark:text-gray-100 flex flex-col min-h-screen transition-colors duration-300">
 
+    <!-- شريط التنقل / الهيدر -->
     <header class="bg-gradient-to-r from-blue-600 to-indigo-700 dark:from-blue-900 dark:to-slate-900 text-white shadow-lg">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <h1 class="text-2xl font-bold tracking-wide">🛒 متجر براند الإلكتروني</h1>
         </div>
     </header>
 
+    <!-- المحتوى الرئيسي -->
     <div class="flex-grow">
         <main class="container mx-auto px-4 py-12 max-w-4xl">
             <!-- صندوق طلب الباقة الرئيسي -->
             <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-gray-800 transition-colors duration-300">
                 <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-gray-100 mb-8">احصل على باقتك الرقمية فوراً</h2>
                 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <!-- اختيار الشركة -->
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">1. نوع الشريحة</label>
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">1. الشركة المزودة</label>
                         <select id="carrier-select" onchange="updatePrice()" class="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:outline-none bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-100"></select>
                     </div>
+                    <!-- اختيار مدة الباقة -->
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">2. مدة الباقة</label>
                         <select id="duration-select" onchange="updatePrice()" class="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:outline-none bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-100">
@@ -34,15 +38,40 @@
                             <option value="month_3">3 شهور</option>
                         </select>
                     </div>
+                    <!-- اختيار نوع الشريحة -->
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">3. نوع الشريحة المفضل</label>
-                        <select id="type-select" onchange="updatePrice()" class="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:outline-none bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-100">
+                        <select id="type-select" onchange="updatePrice(); toggleLocation()" class="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:outline-none bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-100">
                             <option value="physical">شريحة تقليدية (Physical SIM)</option>
                             <option value="esim">شريحة إلكترونية (eSIM)</option>
                         </select>
                     </div>
                 </div>
 
+                <!-- حقل اختيار المكان (يظهر فقط عند اختيار شريحة تقليدية) -->
+                <div id="location-container" class="mb-8 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700 transition-all duration-300">
+                    <label class="block text-sm font-bold text-blue-700 dark:text-blue-400 mb-2">📍 يرجى تحديد منطقة التواجد لاستلام الشريحة:</label>
+                    <select id="location-select" class="w-full md:w-1/2 p-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100">
+                        <option value="غزة">غزة</option>
+                        <option value="السرايا">السرايا</option>
+                        <option value="البريج">البريج</option>
+                        <option value="التفاح">التفاح</option>
+                        <option value="الشيخ رضوان (الشيخ رضوان)">الشيخ رضوان (الشيخ رضوان)</option>
+                        <option value="الزيتون">الزيتون</option>
+                        <option value="الشاطئ">الشاطئ</option>
+                        <option value="القرارة">القرارة</option>
+                        <option value="المغازي">المغازي</option>
+                        <option value="النصر">النصر</option>
+                        <option value="النصيرات">النصيرات</option>
+                        <option value="بيت لاهيا">بيت لاهيا</option>
+                        <option value="جباليا">جباليا</option>
+                        <option value="خانيونس">خانيونس</option>
+                        <option value="دير البلح">دير البلح</option>
+                        <option value="مدينة حمد">مدينة حمد</option>
+                    </select>
+                </div>
+
+                <!-- عرض السعر وزر الشراء -->
                 <div class="bg-blue-50 dark:bg-blue-950/40 rounded-xl p-6 text-center border border-blue-100 dark:border-blue-900/50 my-8 transition-colors duration-300">
                     <p class="text-gray-600 dark:text-gray-400 text-lg mb-1">السعر الإجمالي</p>
                     <div class="text-4xl font-black text-blue-600 dark:text-blue-400 mb-4"><span id="price-display">0</span> ₪</div>
@@ -52,32 +81,28 @@
                 </div>
             </div>
 
-            <!-- قسم طرق الدفع الجديد -->
+            <!-- قسم طرق الدفع -->
             <div class="mt-12 bg-white dark:bg-gray-900 rounded-2xl shadow-md p-6 border border-gray-100 dark:border-gray-800 text-center transition-colors duration-300">
                 <h3 class="text-lg font-bold text-gray-700 dark:text-gray-300 mb-6 flex items-center justify-center gap-2">
                     💳 طرق الدفع المتاحة والمقبولة لدينا
                 </h3>
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 items-center justify-center">
                     
-                    <!-- بنك فلسطين -->
                     <div class="flex flex-col items-center justify-center p-4 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/40">
                         <div class="w-12 h-12 rounded-full bg-orange-500 text-white flex items-center justify-center font-black text-xs shadow-sm mb-2 select-none tracking-tighter">BOP</div>
                         <span class="text-xs font-bold text-gray-600 dark:text-gray-400">بنك فلسطين</span>
                     </div>
 
-                    <!-- Binance -->
                     <div class="flex flex-col items-center justify-center p-4 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/40">
                         <div class="w-12 h-12 rounded-full bg-amber-400 text-slate-900 flex items-center justify-center text-lg shadow-sm mb-2 font-black select-none">🔶</div>
                         <span class="text-xs font-bold text-gray-600 dark:text-gray-400">BINANCE (USDT)</span>
                     </div>
 
-                    <!-- جوال بي -->
                     <div class="flex flex-col items-center justify-center p-4 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/40">
                         <div class="w-12 h-12 rounded-full bg-emerald-600 text-white flex items-center justify-center font-black text-base shadow-sm mb-2 select-none">جوال</div>
                         <span class="text-xs font-bold text-gray-600 dark:text-gray-400">جوال بي (Jawwal Pay)</span>
                     </div>
 
-                    <!-- بال بي -->
                     <div class="flex flex-col items-center justify-center p-4 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/40">
                         <div class="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs shadow-sm mb-2 select-none">PalPay</div>
                         <span class="text-xs font-bold text-gray-600 dark:text-gray-400">بال بي (PalPay)</span>
@@ -88,6 +113,7 @@
         </main>
     </div>
 
+    <!-- تذييل الصفحة / الفوتر -->
     <footer class="bg-gray-900 text-gray-300 py-8 border-t border-gray-800 mt-auto dark:bg-black">
         <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
@@ -102,12 +128,17 @@
         </div>
     </footer>
 
+    <!-- البرمجة (JavaScript) -->
     <script>
-        let initialData = {
-            "هوت موبايل": { month_1: 50, month_3: 125 }, "بارتنر": { month_1: 50, month_3: 125 },
-            "بيليفون": { month_1: 50, month_3: 135 }, "019": { month_1: 50, month_3: 135 },
-            "رامي ليفي": { month_1: 60, month_3: 135 }, "ويكوم": { month_1: 50, month_3: 120 },
-            "سيلكوم": { month_1: 50, month_3: 120 }, "الوها": { month_1: 50, month_3: 130 }
+        const initialData = {
+            "هوت موبايل": { month_1: 50, month_3: 125 }, 
+            "بارتنر": { month_1: 50, month_3: 125 },
+            "بيليفون": { month_1: 50, month_3: 135 }, 
+            "019": { month_1: 50, month_3: 135 },
+            "رامي ليفي": { month_1: 60, month_3: 135 }, 
+            "ويكوم": { month_1: 50, month_3: 120 },
+            "سيلكوم": { month_1: 50, month_3: 120 }, 
+            "الوها": { month_1: 50, month_3: 130 }
         };
 
         let storeData = JSON.parse(localStorage.getItem('brand_store_prices')) || initialData;
@@ -115,30 +146,60 @@
         function initApp() {
             const carrierSelect = document.getElementById('carrier-select');
             carrierSelect.innerHTML = '';
+            
             for (let carrier in storeData) {
                 let option = document.createElement('option');
-                option.value = carrier; option.textContent = carrier;
+                option.value = carrier; 
+                option.textContent = carrier;
                 carrierSelect.appendChild(option);
             }
             updatePrice();
+            toggleLocation(); // لضبط إظهار/إخفاء حقل المكان عند تحميل الصفحة
         }
 
         function updatePrice() {
             const carrier = document.getElementById('carrier-select').value;
             const duration = document.getElementById('duration-select').value;
-            if (storeData[carrier]) {
+            
+            if (storeData[carrier] && storeData[carrier][duration] !== undefined) {
                 document.getElementById('price-display').textContent = storeData[carrier][duration];
+            } else {
+                document.getElementById('price-display').textContent = "0";
+            }
+        }
+
+        // دالة جديدة لإظهار/إخفاء حقل المكان حسب نوع الشريحة
+        function toggleLocation() {
+            const type = document.getElementById('type-select').value;
+            const locationContainer = document.getElementById('location-container');
+            
+            if (type === 'physical') {
+                locationContainer.style.display = 'block';
+            } else {
+                locationContainer.style.display = 'none';
             }
         }
 
         function sendToWhatsApp() {
             const carrier = document.getElementById('carrier-select').value;
             const duration = document.getElementById('duration-select').options[document.getElementById('duration-select').selectedIndex].text;
-            const type = document.getElementById('type-select').options[document.getElementById('type-select').selectedIndex].text;
+            
+            const typeSelect = document.getElementById('type-select');
+            const typeValue = typeSelect.value;
+            const typeText = typeSelect.options[typeSelect.selectedIndex].text;
+            
             const price = document.getElementById('price-display').textContent;
             const phoneNumber = "972599783984"; 
 
-            const message = `مرحباً، أود طلب الباقة التالية من متجر براند:\n\n📱 نوع الشريحة: ${carrier}\n⏳ المدة: ${duration}\n🏷️ نوع الشريحة: ${type}\n💰 السعر الإجمالي: ${price} ₪\n\nبانتظار تأكيد الطلب وطريقة الدفع.`;
+            // إضافة مكان التواجد للرسالة فقط إذا كانت الشريحة تقليدية
+            let locationInfo = "";
+            if (typeValue === 'physical') {
+                const location = document.getElementById('location-select').value;
+                locationInfo = `\n📍 منطقة التواجد للاستلام: ${location}`;
+            }
+
+            const message = `مرحباً، أود طلب الباقة التالية من متجر براند:\n\n📱 شركة الاتصال: ${carrier}\n⏳ المدة: ${duration}\n🏷️ نوع الشريحة: ${typeText}${locationInfo}\n💰 السعر الإجمالي: ${price} ₪\n\nبانتظار تأكيد الطلب وطريقة الدفع.`;
+            
             window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
         }
 
