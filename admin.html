@@ -6,6 +6,8 @@
     <title>لوحة تحكم الأدمن - متجر براند</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- 1. استدعاء مكتبة كلاود فلير ترنستايل -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <style>body { font-family: 'Cairo', sans-serif; }</style>
 </head>
 <body class="bg-gray-100 text-gray-800 min-h-screen flex items-center justify-center p-4">
@@ -27,6 +29,13 @@
                 <label class="block text-sm font-semibold text-gray-600 mb-1">كلمة المرور</label>
                 <input type="password" id="login-password" placeholder="••••••••" class="w-full p-3 border border-gray-300 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 text-left" dir="ltr">
             </div>
+
+            <!-- 2. حاوية الكابتشا (ستظهر هنا تلقائياً) -->
+            <div class="flex justify-center my-2">
+                <!-- استبدل YOUR_SITE_KEY بالـ Key الخاص بك من حساب كلاود فلير -->
+                <div class="cf-turnstile" data-sitekey="YOUR_SITE_KEY" data-callback="onTurnstileSuccess"></div>
+            </div>
+
             <button onclick="handleLogin()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg transition transform hover:-translate-y-0.5 cursor-pointer mt-2">
                 دخول اللوحة
             </button>
@@ -79,6 +88,14 @@
     </div>
 
     <script>
+        // متغير للاحتفاظ بحالة التحقق من الكابتشا
+        let isCaptchaVerified = false;
+
+        // دالة يتم استدعاؤها تلقائياً عند نجاح التحقق من الكابتشا
+        function onTurnstileSuccess(token) {
+            isCaptchaVerified = true;
+        }
+
         // قاعدة البيانات الافتراضية للباقات
         let initialData = {
             "هوت موبايل": { month_1: 50, month_3: 125 }, "بارتنر": { month_1: 50, month_3: 125 },
@@ -96,6 +113,12 @@
 
         // دالة التحقق من بيانات تسجيل الدخول للواجهة المحدثة
         function handleLogin() {
+            // 3. التحقق أولاً إذا كان المستخدم قد تخطى الكابتشا بنجاح
+            if (!isCaptchaVerified) {
+                alert("⚠️ الرجاء التحقق من اختبار الكابتشا أولاً!");
+                return;
+            }
+
             const userIn = document.getElementById('login-username').value.trim();
             const passIn = document.getElementById('login-password').value.trim();
 
@@ -108,6 +131,9 @@
                 initAdminTable();
             } else {
                 alert("❌ اسم المستخدم أو كلمة المرور غير صحيحة!");
+                // إعادة تعيين الكابتشا لإجبار البوتات على إعادة المحاولة عند الخطأ
+                if (typeof turnstile !== 'undefined') turnstile.reset();
+                isCaptchaVerified = false;
             }
         }
 
