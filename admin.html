@@ -6,15 +6,11 @@
     <title>لوحة تحكم الأدمن - متجر براند</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- 1. استدعاء مكتبة كلاود فلير ترنستايل -->
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-    <!-- 2. استدعاء مكتبة EmailJS لإرسال الإيميل من الـ Frontend -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@1/dist/email.min.js"></script>
     <style>body { font-family: 'Cairo', sans-serif; }</style>
 </head>
 <body class="bg-gray-100 text-gray-800 min-h-screen flex items-center justify-center p-4">
 
-    <!-- 1. واجهة نموذج تسجيل الدخول -->
     <div id="login-card" class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full border border-gray-100">
         <div class="text-center mb-6">
             <div class="text-4xl mb-2">🔐</div>
@@ -32,16 +28,10 @@
                 <input type="password" id="login-password" placeholder="••••••••" class="w-full p-3 border border-gray-300 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 text-left" dir="ltr">
             </div>
 
-            <!-- حاوية الكابتشا -->
-            <div class="flex justify-center my-2">
-                <div class="cf-turnstile" data-sitekey="0x4AAAAAADvgZiVMTl59Zpv4" data-callback="onTurnstileSuccess"></div>
-            </div>
-
             <button onclick="handleLogin()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg transition transform hover:-translate-y-0.5 cursor-pointer mt-2">
                 دخول اللوحة
             </button>
 
-            <!-- زر نسيت اسم المستخدم وكلمة المرور -->
             <div class="text-center mt-4">
                 <button onclick="toggleForgotModal(true)" class="text-sm text-blue-600 hover:underline cursor-pointer">
                     نسيت اسم المستخدم أو كلمة المرور؟
@@ -50,7 +40,6 @@
         </div>
     </div>
 
-    <!-- نافذة منبثقة (Modal) لطلب استعادة البيانات -->
     <div id="forgot-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl">
             <h3 class="text-lg font-bold text-gray-800 mb-2">🔑 استعادة بيانات الحساب</h3>
@@ -67,9 +56,7 @@
         </div>
     </div>
 
-    <!-- 2. محتوى لوحة التحكم (مخفي افتراضياً) -->
     <div id="admin-dashboard" class="container mx-auto max-w-5xl w-full hidden self-start py-6">
-        <!-- قِسم إدارة الحساب والأمان والتعديل -->
         <div class="bg-gradient-to-r from-red-50 to-orange-50 rounded-2xl shadow-md p-6 border border-red-100 mb-8">
             <h3 class="text-lg font-bold text-red-800 mb-2">🔐 تعديل بيانات الأمان والحساب</h3>
             <p class="text-sm text-gray-600 mb-4">يمكنك تحديث اسم المستخدم وكلمة المرور الخاصة بك من هنا في أي وقت.</p>
@@ -82,7 +69,6 @@
             </div>
         </div>
 
-        <!-- جدول الأسعار للباقات -->
         <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
             <div class="flex justify-between items-center mb-6 border-b pb-4">
                 <h2 class="text-2xl font-bold text-gray-800">🛠️ تعديل أسعار الباقات في المتجر</h2>
@@ -99,8 +85,7 @@
                         </tr>
                     </thead>
                     <tbody id="admin-table-body" class="text-gray-600 text-sm font-light">
-                        <!-- سيتم توليدها عبر جافاسكريبت -->
-                    </tbody>
+                        </tbody>
                 </table>
             </div>
 
@@ -113,13 +98,10 @@
     </div>
 
     <script>
-        // تهيئة EmailJS بمفتاحك العام (سنستبدله لاحقاً)
+        // تهيئة EmailJS بمفتاحك العام (إذا كنت تستخدم الميزة، استبدل النص بمفتاحك)
         (function() {
-            emailjs.init("YOUR_PUBLIC_KEY");
+            // emailjs.init("YOUR_PUBLIC_KEY"); 
         })();
-
-        let isCaptchaVerified = false;
-        function onTurnstileSuccess(token) { isCaptchaVerified = true; }
 
         let initialData = {
             "هوت موبايل": { month_1: 50, month_3: 125 }, "بارتنر": { month_1: 50, month_3: 125 },
@@ -147,17 +129,10 @@
 
         // دالة إرسال الإيميل بالبيانات الحالية
         function sendCredentialsEmail() {
-            // التحقق من الكابتشا لحماية ميزة الإرسال أيضاً منعاً لسبام البوتات
-            if (!isCaptchaVerified) {
-                alert("⚠️ الرجاء التحقق من اختبار الكابتشا أولاً في الخلفية!");
-                return;
-            }
-
             const sendBtn = document.getElementById('send-btn');
             sendBtn.innerText = "جاري الإرسال... ⏳";
             sendBtn.disabled = true;
 
-            // إرسال البيانات عبر EmailJS
             emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
                 to_username: adminUser,
                 to_password: adminPassword
@@ -174,12 +149,8 @@
             });
         }
 
+        // دالة الدخول (الآن تعمل مباشرة وفوراً بدون قيود الكابتشا)
         function handleLogin() {
-            if (!isCaptchaVerified) {
-                alert("⚠️ الرجاء التحقق من اختبار الكابتشا أولاً!");
-                return;
-            }
-
             const userIn = document.getElementById('login-username').value.trim();
             const passIn = document.getElementById('login-password').value.trim();
 
@@ -190,8 +161,6 @@
                 initAdminTable();
             } else {
                 alert("❌ اسم المستخدم أو كلمة المرور غير صحيحة!");
-                if (typeof turnstile !== 'undefined') turnstile.reset();
-                isCaptchaVerified = false;
             }
         }
 
