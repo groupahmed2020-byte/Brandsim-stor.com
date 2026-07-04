@@ -6,7 +6,7 @@
     <title>لوحة تحكم الأدمن - متجر براند</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@1/dist/email.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>body { font-family: 'Cairo', sans-serif; }</style>
 </head>
 <body class="bg-gray-100 text-gray-800 min-h-screen flex items-center justify-center p-4">
@@ -18,32 +18,32 @@
             <p class="text-sm text-gray-500 mt-1">الرجاء إدخال بيانات الاعتماد للوصول للوحة التحكم</p>
         </div>
         
-        <div class="space-y-4">
+        <form onsubmit="handleLogin(event)" class="space-y-4">
             <div>
                 <label class="block text-sm font-semibold text-gray-600 mb-1">اسم المستخدم</label>
-                <input type="text" id="login-username" placeholder="ادخل اسم المستخدم" class="w-full p-3 border border-gray-300 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 text-left" dir="ltr">
+                <input type="text" id="login-username" name="username" autocomplete="username" placeholder="ادخل اسم المستخدم" class="w-full p-3 border border-gray-300 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 text-left" dir="ltr" required>
             </div>
             <div>
                 <label class="block text-sm font-semibold text-gray-600 mb-1">كلمة المرور</label>
-                <input type="password" id="login-password" placeholder="••••••••" class="w-full p-3 border border-gray-300 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 text-left" dir="ltr">
+                <input type="password" id="login-password" name="password" autocomplete="current-password" placeholder="••••••••" class="w-full p-3 border border-gray-300 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 text-left" dir="ltr" required>
             </div>
 
-            <button onclick="handleLogin()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg transition transform hover:-translate-y-0.5 cursor-pointer mt-2">
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg transition transform hover:-translate-y-0.5 cursor-pointer mt-2">
                 دخول اللوحة
             </button>
 
             <div class="text-center mt-4">
-                <button onclick="toggleForgotModal(true)" class="text-sm text-blue-600 hover:underline cursor-pointer">
+                <button type="button" onclick="toggleForgotModal(true)" class="text-sm text-blue-600 hover:underline cursor-pointer">
                     نسيت اسم المستخدم أو كلمة المرور؟
                 </button>
             </div>
-        </div>
+        </form>
     </div>
 
     <div id="forgot-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl">
             <h3 class="text-lg font-bold text-gray-800 mb-2">🔑 استعادة بيانات الحساب</h3>
-            <p class="text-sm text-gray-600 mb-4">سيتم إرسال اسم المستخدم وكلمة المرور الحالية إلى بريدك الجيميل المعتمد.</p>
+            <p class="text-sm text-gray-600 mb-4">سيتم إرسال اسم المستخدم وكلمة المرور الحالية إلى بريدك الإلكتروني المعتمد.</p>
             
             <div class="space-y-3">
                 <button onclick="sendCredentialsEmail()" id="send-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 rounded-xl transition cursor-pointer">
@@ -98,9 +98,14 @@
     </div>
 
     <script>
-        // تهيئة EmailJS بمفتاحك العام (إذا كنت تستخدم الميزة، استبدل النص بمفتاحك)
+        const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY"; 
+        const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";
+        const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";
+
         (function() {
-            // emailjs.init("YOUR_PUBLIC_KEY"); 
+            if(EMAILJS_PUBLIC_KEY !== "YOUR_PUBLIC_KEY") {
+                emailjs.init(EMAILJS_PUBLIC_KEY);
+            }
         })();
 
         let initialData = {
@@ -110,12 +115,10 @@
             "سيلكوم": { month_1: 50, month_3: 120 }, "الوها": { month_1: 50, month_3: 130 }
         };
 
-        // جلب البيانات أو تعيين الافتراضية
         let adminUser = localStorage.getItem('brand_admin_user') || 'admin';
         let adminPassword = localStorage.getItem('brand_admin_pass') || 'admin123';
         let storeData = JSON.parse(localStorage.getItem('brand_store_prices')) || initialData;
 
-        // دالة التحكم في إظهار وإخفاء نافذة استعادة البيانات
         function toggleForgotModal(show) {
             const modal = document.getElementById('forgot-modal');
             if (show) {
@@ -127,18 +130,22 @@
             }
         }
 
-        // دالة إرسال الإيميل بالبيانات الحالية
         function sendCredentialsEmail() {
+            if(EMAILJS_PUBLIC_KEY === "YOUR_PUBLIC_KEY") {
+                alert("⚠️ يرجى إعداد مفاتيح EmailJS في الكود أولاً لكي يتم الإرسال!");
+                return;
+            }
+
             const sendBtn = document.getElementById('send-btn');
             sendBtn.innerText = "جاري الإرسال... ⏳";
             sendBtn.disabled = true;
 
-            emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
                 to_username: adminUser,
                 to_password: adminPassword
             })
             .then(function() {
-                alert("✉️ تم إرسال بيانات الاعتماد الحالية إلى بريدك الجيميل المعتمد بنجاح!");
+                alert("✉️ تم إرسال بيانات الاعتماد الحالية إلى بريدك المعتمد بنجاح!");
                 toggleForgotModal(false);
             }, function(error) {
                 alert("❌ فشل الإرسال، يرجى التحقق من إعدادات الخدمة: " + JSON.stringify(error));
@@ -149,8 +156,10 @@
             });
         }
 
-        // دالة الدخول (الآن تعمل مباشرة وفوراً بدون قيود الكابتشا)
-        function handleLogin() {
+        // دالة الدخول المعدلة لاستقبال الحدث ومنع تحديث الصفحة التلقائي للنموذج
+        function handleLogin(event) {
+            if (event) event.preventDefault(); // منع إعادة تحميل الصفحة الافتراضية للنموذج
+
             const userIn = document.getElementById('login-username').value.trim();
             const passIn = document.getElementById('login-password').value.trim();
 
