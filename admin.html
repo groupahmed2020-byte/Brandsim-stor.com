@@ -8,41 +8,78 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>body { font-family: 'Cairo', sans-serif; }</style>
 </head>
-<body class="bg-gray-100 text-gray-800 p-6 opacity-0 transition-opacity duration-300" id="admin-body">
+<body class="bg-gray-100 text-gray-800 min-h-screen flex items-center justify-center p-4">
 
-    <div class="container mx-auto max-w-5xl">
-        <div class="bg-red-50 rounded-2xl shadow-md p-6 border border-red-100 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <!-- 1. واجهة نموذج تسجيل الدخول (تظهر أولاً) -->
+    <div id="login-card" class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full border border-gray-100">
+        <div class="text-center mb-6">
+            <div class="text-4xl mb-2">🔐</div>
+            <h2 class="text-2xl font-bold text-gray-800">تسجيل دخول الأدمن</h2>
+            <p class="text-sm text-gray-500 mt-1">الرجاء إدخال بيانات الاعتماد للوصول للوحة التحكم</p>
+        </div>
+        
+        <div class="space-y-4">
             <div>
-                <h3 class="text-lg font-bold text-red-800">🔐 أمان لوحة التحكم</h3>
-                <p class="text-sm text-gray-600">تعديل كلمة مرور الدخول لهذه الصفحة.</p>
+                <label class="block text-sm font-semibold text-gray-600 mb-1">اسم المستخدم</label>
+                <input type="text" id="login-username" placeholder="ادخل اسم المستخدم" class="w-full p-3 border border-gray-300 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 text-left" dir="ltr">
             </div>
-            <div class="flex gap-2 w-full md:w-auto">
-                <input type="password" id="new-password-input" placeholder="كلمة المرور الجديدة" class="p-2 border border-gray-300 rounded-lg bg-white focus:outline-none text-sm">
-                <button onclick="changePassword()" class="bg-red-600 hover:bg-red-700 text-white font-semibold text-sm px-4 py-2 rounded-lg cursor-pointer">تحديث</button>
+            <div>
+                <label class="block text-sm font-semibold text-gray-600 mb-1">كلمة المرور</label>
+                <input type="password" id="login-password" placeholder="••••••••" class="w-full p-3 border border-gray-300 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 text-left" dir="ltr">
+            </div>
+            <button onclick="handleLogin()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg transition transform hover:-translate-y-0.5 cursor-pointer mt-2">
+                دخول اللوحة
+            </button>
+        </div>
+    </div>
+
+    <!-- 2. محتوى لوحة التحكم (مخفي افتراضياً ويظهر بعد نجاح الدخول) -->
+    <div id="admin-dashboard" class="container mx-auto max-w-5xl w-full hidden self-start py-6">
+        <!-- قِسم إدارة الحساب والأمان والتعديل -->
+        <div class="bg-gradient-to-r from-red-50 to-orange-50 rounded-2xl shadow-md p-6 border border-red-100 mb-8">
+            <h3 class="text-lg font-bold text-red-800 mb-2">🔐 تعديل بيانات الأمان والحساب</h3>
+            <p class="text-sm text-gray-600 mb-4">يمكنك تحديث اسم المستخدم وكلمة المرور الخاصة بك من هنا في أي وقت.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <input type="text" id="new-username-input" placeholder="اسم المستخدم الجديد" class="p-3 border border-gray-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-red-400 text-sm">
+                <input type="password" id="new-password-input" placeholder="كلمة المرور الجديدة" class="p-3 border border-gray-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-red-400 text-sm">
+                <button onclick="updateAccountDetails()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-3 rounded-xl transition cursor-pointer">
+                    تحديث بيانات الحساب
+                </button>
             </div>
         </div>
 
+        <!-- جدول الأسعار للباقات -->
         <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-4">🛠️ تعديل أسعار الباقات</h2>
+            <div class="flex justify-between items-center mb-6 border-b pb-4">
+                <h2 class="text-2xl font-bold text-gray-800">🛠️ تعديل أسعار الباقات في المتجر</h2>
+                <button onclick="handleLogout()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold px-4 py-2 rounded-xl transition cursor-pointer text-sm">تسجيل الخروج 🚪</button>
+            </div>
+            
             <div class="overflow-x-auto">
-                <table class="w-full table-auto text-right">
+                <table class="w-full table-auto text-right border-collapse">
                     <thead>
-                        <tr class="bg-gray-100 text-gray-700 text-sm">
-                            <th class="py-3 px-6 rounded-r-lg">الشركة</th>
+                        <tr class="bg-gray-100 text-gray-700 uppercase text-sm leading-normal">
+                            <th class="py-3 px-6 rounded-r-lg">الشركة / الشريحة</th>
                             <th class="py-3 px-6">سعر الشهر (₪)</th>
                             <th class="py-3 px-6 rounded-l-lg">سعر 3 شهور (₪)</th>
                         </tr>
                     </thead>
-                    <tbody id="admin-table-body" class="text-sm"></tbody>
+                    <tbody id="admin-table-body" class="text-gray-600 text-sm font-light">
+                        <!-- سيتم توليدها عبر جافاسكريبت -->
+                    </tbody>
                 </table>
             </div>
+
             <div class="mt-6 flex justify-end">
-                <button onclick="savePrices()" class="bg-green-600 hover:bg-green-700 text-white font-bold px-8 py-3 rounded-xl shadow-md cursor-pointer">حفظ وتحديث المتجر</button>
+                <button onclick="savePrices()" class="bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold px-8 py-3 rounded-xl shadow-md hover:opacity-90 transition cursor-pointer">
+                    حفظ التغييرات وتحديث المتجر
+                </button>
             </div>
         </div>
     </div>
 
     <script>
+        // قاعدة البيانات الافتراضية للباقات
         let initialData = {
             "هوت موبايل": { month_1: 50, month_3: 125 }, "بارتنر": { month_1: 50, month_3: 125 },
             "بيليفون": { month_1: 50, month_3: 135 }, "019": { month_1: 50, month_3: 135 },
@@ -50,55 +87,89 @@
             "سيلكوم": { month_1: 50, month_3: 120 }, "الوها": { month_1: 50, month_3: 130 }
         };
 
+        // جلب أو تعيين بيانات الاعتماد للأمان (الافتراضي: admin / admin123)
+        let adminUser = localStorage.getItem('brand_admin_user') || 'admin';
         let adminPassword = localStorage.getItem('brand_admin_pass') || 'admin123';
+
+        // جلب الأسعار الحالية للمتجر
         let storeData = JSON.parse(localStorage.getItem('brand_store_prices')) || initialData;
 
-        // التحقق من الحماية فوراً قبل إظهار الصفحة
-        function checkAccess() {
-            const userInput = prompt("الرجاء إدخال كلمة مرور الأدمن:");
-            if (userInput === adminPassword) {
-                document.getElementById('admin-body').classList.remove('opacity-0');
-                initAdmin();
+        // دالة التحقق من بيانات تسجيل الدخول للواجهة المحدثة
+        function handleLogin() {
+            const userIn = document.getElementById('login-username').value.trim();
+            const passIn = document.getElementById('login-password').value.trim();
+
+            if (userIn === adminUser && passIn === adminPassword) {
+                // إخفاء كارت تسجيل الدخول وإظهار لوحة التحكم بالكامل
+                document.getElementById('login-card').classList.add('hidden');
+                document.getElementById('admin-dashboard').classList.remove('hidden');
+                // تغيير محاذاة الصفحة لتناسب لوحة التحكم العريضة
+                document.body.className = "bg-gray-100 text-gray-800 min-h-screen p-6";
+                initAdminTable();
             } else {
-                alert("❌ كلمة المرور خاطئة!");
-                window.location.href = "index.html"; // طرد المستخدم للمتجر
+                alert("❌ اسم المستخدم أو كلمة المرور غير صحيحة!");
             }
         }
 
-        function initAdmin() {
+        // دالة تعبئة جدول الباقات والأسعار
+        function initAdminTable() {
             const adminTableBody = document.getElementById('admin-table-body');
             adminTableBody.innerHTML = '';
+            
             for (let carrier in storeData) {
                 let row = document.createElement('tr');
                 row.className = "border-b border-gray-200 hover:bg-gray-50";
                 row.innerHTML = `
-                    <td class="py-4 px-6 font-semibold">${carrier}</td>
-                    <td class="py-4 px-6"><input type="number" id="input-${carrier}-m1" value="${storeData[carrier].month_1}" class="w-24 p-2 border rounded-lg bg-white"></td>
-                    <td class="py-4 px-6"><input type="number" id="input-${carrier}-m3" value="${storeData[carrier].month_3}" class="w-24 p-2 border rounded-lg bg-white"></td>
+                    <td class="py-4 px-6 font-semibold text-gray-800">${carrier}</td>
+                    <td class="py-4 px-6">
+                        <input type="number" id="input-${carrier}-m1" value="${storeData[carrier].month_1}" class="w-24 p-2 border border-gray-300 rounded-lg focus:outline-none bg-white">
+                    </td>
+                    <td class="py-4 px-6">
+                        <input type="number" id="input-${carrier}-m3" value="${storeData[carrier].month_3}" class="w-24 p-2 border border-gray-300 rounded-lg focus:outline-none bg-white">
+                    </td>
                 `;
                 adminTableBody.appendChild(row);
             }
         }
 
-        function changePassword() {
+        // دالة تحديث اسم المستخدم وكلمة المرور معاً
+        function updateAccountDetails() {
+            const newUser = document.getElementById('new-username-input').value.trim();
             const newPass = document.getElementById('new-password-input').value.trim();
-            if(!newPass) return alert("اكتب كلمة مرور صالحة");
-            localStorage.setItem('brand_admin_pass', newPass);
-            adminPassword = newPass;
-            alert("🔒 تم تغيير كلمة المرور بنجاح!");
+
+            if (!newUser && !newPass) {
+                alert("الرجاء تعبئة اسم المستخدم الجديد أو كلمة المرور الجديدة على الأقل للتحديث!");
+                return;
+            }
+
+            if (newUser) {
+                adminUser = newUser;
+                localStorage.setItem('brand_admin_user', newUser);
+            }
+            if (newPass) {
+                adminPassword = newPass;
+                localStorage.setItem('brand_admin_pass', newPass);
+            }
+
+            alert("🔒 تم تحديث بيانات الحساب بنجاح! سيتم تطبيقها في الدخول القادم.");
+            document.getElementById('new-username-input').value = "";
             document.getElementById('new-password-input').value = "";
         }
 
+        // دالة حفظ الأسعار الجديدة للمتجر
         function savePrices() {
             for (let carrier in storeData) {
                 storeData[carrier].month_1 = Number(document.getElementById(`input-${carrier}-m1`).value);
                 storeData[carrier].month_3 = Number(document.getElementById(`input-${carrier}-m3`).value);
             }
             localStorage.setItem('brand_store_prices', JSON.stringify(storeData));
-            alert('تم حفظ الأسعار الجديدة بنجاح!');
+            alert('تم حفظ الأسعار الجديدة بنجاح وتحديث المتجر المباشر!');
         }
 
-        checkAccess();
+        // دالة تسجيل الخروج لإعادة قفل الصفحة
+        function handleLogout() {
+            window.location.reload();
+        }
     </script>
 </body>
 </html>
