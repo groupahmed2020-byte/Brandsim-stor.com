@@ -48,6 +48,7 @@
                 <div id="location-container" class="mb-8 block">
                     <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">4. مكان تواجدك (للتوصيل)</label>
                     <select id="location-select" class="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:outline-none bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-100">
+                        <option value="غزة">غزة</option>
                         <option value="البريج">البريج</option>
                         <option value="التفاح">التفاح</option>
                         <option value="الشيخ رضوان">الشيخ رضوان</option>
@@ -74,7 +75,7 @@
                 </div>
             </div>
 
-            <!-- قسم طرق الدفع الجديد بالصور والأيقونات المحددة -->
+            <!-- قسم طرق الدفع المدمج بالكامل وبدون الحاجة لرفع صور خارجية -->
             <div class="mt-12 bg-white dark:bg-gray-900 rounded-2xl shadow-md p-8 border border-gray-100 dark:border-gray-800 text-center transition-colors duration-300">
                 <h3 class="text-lg font-bold text-gray-700 dark:text-gray-300 mb-6 flex items-center justify-center gap-2">
                     💳 طرق الدفع المتاحة والمقبولة لدينا
@@ -83,25 +84,25 @@
                     
                     <!-- محفظة باينانس -->
                     <div class="flex flex-col items-center justify-center p-3 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/40 hover:shadow-sm transition">
-                        <img src="1000010318.jpg" alt="Binance" class="w-16 h-16 rounded-xl object-cover shadow-sm mb-2">
+                        <div class="w-16 h-16 rounded-xl bg-[#1e2329] flex items-center justify-center shadow-sm mb-2 text-2xl select-none">🔶</div>
                         <span class="text-xs font-bold text-gray-600 dark:text-gray-400">محفظة باينانس</span>
                     </div>
 
                     <!-- بنك فلسطين -->
                     <div class="flex flex-col items-center justify-center p-3 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/40 hover:shadow-sm transition">
-                        <img src="1000010319.jpg" alt="Bank of Palestine" class="w-16 h-16 rounded-xl object-cover shadow-sm mb-2">
+                        <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-red-600 to-red-800 text-white flex items-center justify-center font-black text-xs shadow-sm mb-2 tracking-tighter select-none">BOP</div>
                         <span class="text-xs font-bold text-gray-600 dark:text-gray-400">بنك فلسطين</span>
                     </div>
 
                     <!-- جوال بي -->
                     <div class="flex flex-col items-center justify-center p-3 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/40 hover:shadow-sm transition">
-                        <img src="1000010321.jpg" alt="Jawwal Pay" class="w-16 h-16 rounded-xl object-cover shadow-sm mb-2">
+                        <div class="w-16 h-16 rounded-xl bg-[#7cb041] text-white flex items-center justify-center font-bold text-sm shadow-sm mb-2 select-none">جوال</div>
                         <span class="text-xs font-bold text-gray-600 dark:text-gray-400">جوال بي</span>
                     </div>
 
                     <!-- بال بي -->
                     <div class="flex flex-col items-center justify-center p-3 rounded-2xl border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/40 hover:shadow-sm transition">
-                        <img src="1000010325.jpg" alt="PalPay" class="w-16 h-16 rounded-xl object-cover shadow-sm mb-2">
+                        <div class="w-16 h-16 rounded-xl bg-[#8c1d8c] text-white flex items-center justify-center font-bold text-xs shadow-sm mb-2 select-none">PalPay</div>
                         <span class="text-xs font-bold text-gray-600 dark:text-gray-400">بال بي</span>
                     </div>
 
@@ -143,7 +144,7 @@
                 carrierSelect.appendChild(option);
             }
             updatePrice();
-            toggleLocationField(); // للتأكد من الحالة الصحيحة عند الإقلاع
+            toggleLocationField();
         }
 
         function updatePrice() {
@@ -154,7 +155,6 @@
             }
         }
 
-        // دالة إخفاء وإظهار حقل مكان التواجد
         function toggleLocationField() {
             const typeSelect = document.getElementById('type-select');
             const locationContainer = document.getElementById('location-container');
@@ -176,7 +176,6 @@
             const phoneNumber = "972599783984"; 
 
             let locationText = "";
-            // إذا كانت الشريحة تقليدية نضيف مكان التواجد للرسالة
             if (typeValue === 'physical') {
                 const locationSelect = document.getElementById('location-select');
                 locationText = `📍 مكان التواجد: ${locationSelect.value}\n`;
