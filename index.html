@@ -4,243 +4,97 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>متجر براند الإلكتروني</title>
-    <!-- تضمين مكتبة Tailwind CSS للتصميم الحديث -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Cairo', sans-serif; }
-    </style>
+    <style>body { font-family: 'Cairo', sans-serif; }</style>
 </head>
 <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
 
-    <!-- الهيدر / شريط التنقل -->
-    <header class="bg-gradient-to-r bg-blue-600 to-indigo-700 text-white shadow-lg">
+    <header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <h1 class="text-2xl font-bold tracking-wide">🛒 متجر براند الإلكتروني</h1>
-            <nav>
-                <button onclick="switchView('store')" id="nav-store" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold mx-2 shadow cursor-pointer">المتجر</button>
-                <button onclick="tryAccessAdmin()" id="nav-admin" class="bg-blue-800 hover:bg-blue-900 text-white px-4 py-2 rounded-lg font-semibold mx-2 shadow transition cursor-pointer">لوحة التحكم (الأدمن)</button>
-            </nav>
         </div>
     </header>
 
-    <!-- محتوى الصفحة الرئيسي -->
     <div class="flex-grow">
-        <!-- أولاً: واجهة المتجر الرئيسية -->
-        <main id="store-view" class="container mx-auto px-4 py-12 max-w-4xl">
+        <main class="container mx-auto px-4 py-12 max-w-4xl">
             <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
                 <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">احصل على باقتك الرقمية فوراً</h2>
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <!-- الخانة الأولى: نوع الشريحة -->
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">1. نوع الشريحة</label>
-                        <select id="carrier-select" onchange="updatePrice()" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none bg-gray-50">
-                            <!-- سيتم تعبئتها عبر الجافاسكريبت -->
-                        </select>
+                        <select id="carrier-select" onchange="updatePrice()" class="w-full p-3 border border-gray-300 rounded-xl focus:outline-none bg-gray-50"></select>
                     </div>
-
-                    <!-- الخانة الثانية: المدة -->
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">2. مدة الباقة</label>
-                        <select id="duration-select" onchange="updatePrice()" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none bg-gray-50">
+                        <select id="duration-select" onchange="updatePrice()" class="w-full p-3 border border-gray-300 rounded-xl focus:outline-none bg-gray-50">
                             <option value="month_1">شهر واحد</option>
                             <option value="month_3">3 شهور</option>
                         </select>
                     </div>
-
-                    <!-- الخانة الثالثة: نوع الشريحة (فيزيكال / إلكترونية) -->
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">3. نوع الشريحة المفضل</label>
-                        <select id="type-select" onchange="updatePrice()" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none bg-gray-50">
+                        <select id="type-select" onchange="updatePrice()" class="w-full p-3 border border-gray-300 rounded-xl focus:outline-none bg-gray-50">
                             <option value="physical">شريحة تقليدية (Physical SIM)</option>
                             <option value="esim">شريحة إلكترونية (eSIM)</option>
                         </select>
                     </div>
                 </div>
 
-                <!-- عرض السعر والطلب -->
                 <div class="bg-blue-50 rounded-xl p-6 text-center border border-blue-100 my-8">
                     <p class="text-gray-600 text-lg mb-1">السعر الإجمالي</p>
                     <div class="text-4xl font-black text-blue-600 mb-4"><span id="price-display">0</span> ₪</div>
-                    <button onclick="sendToWhatsApp()" class="w-full md:w-auto bg-green-500 hover:bg-green-600 text-white font-bold text-lg px-12 py-3 rounded-xl shadow-lg transition transform hover:-translate-y-0.5 cursor-pointer">
+                    <button onclick="sendToWhatsApp()" class="w-full md:w-auto bg-green-500 hover:bg-green-600 text-white font-bold text-lg px-12 py-3 rounded-xl shadow-lg cursor-pointer">
                         اشترِ الآن عبر واتساب 📲
-                    </button>
-                </div>
-            </div>
-        </main>
-
-        <!-- ثانياً: لوحة تحكم الأدمن -->
-        <main id="admin-view" class="container mx-auto px-4 py-12 max-w-5xl hidden">
-            <!-- قِسم إدارة كلمة السر -->
-            <div class="bg-red-50 rounded-2xl shadow-md p-6 border border-red-100 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h3 class="text-lg font-bold text-red-800">🔐 الأمان وإدارة الحساب</h3>
-                    <p class="text-sm text-gray-600">يمكنك تحديث كلمة مرور لوحة التحكم من هنا متى شئت.</p>
-                </div>
-                <div class="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
-                    <input type="password" id="new-password-input" placeholder="كلمة المرور الجديدة" class="p-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-red-400 text-sm">
-                    <button onclick="changePassword()" class="bg-red-600 hover:bg-red-700 text-white font-semibold text-sm px-4 py-2 rounded-lg transition cursor-pointer">
-                        تحديث كلمة السر
-                    </button>
-                </div>
-            </div>
-
-            <!-- جدول تعديل الأسعار -->
-            <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
-                <div class="flex justify-between items-center mb-6 border-b pb-4">
-                    <h2 class="text-2xl font-bold text-gray-800">🛠️ تعديل أسعار الباقات في المتجر</h2>
-                    <p class="text-sm text-gray-500">ملاحظة: التعديلات تطبق فور الحفظ وتخزن تلقائياً.</p>
-                </div>
-                
-                <div class="overflow-x-auto">
-                    <table class="w-full table-auto text-right border-collapse">
-                        <thead>
-                            <tr class="bg-gray-100 text-gray-700 uppercase text-sm leading-normal">
-                                <th class="py-3 px-6 rounded-r-lg">الشركة / الشريحة</th>
-                                <th class="py-3 px-6">سعر الشهر (₪)</th>
-                                <th class="py-3 px-6 rounded-l-lg">سعر 3 شهور (₪)</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-table-body" class="text-gray-600 text-sm font-light">
-                            <!-- سيتم توليد الصفوف برمجياً -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="mt-6 flex justify-end">
-                    <button onclick="savePrices()" class="bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold px-8 py-3 rounded-xl shadow-md hover:opacity-90 transition cursor-pointer">
-                        حفظ التغييرات وتحديث المتجر
                     </button>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- أسفل الصفحة (الفوتر) للتواصل -->
     <footer class="bg-gray-900 text-gray-300 py-8 border-t border-gray-800 mt-auto">
         <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
                 <p class="font-bold text-lg text-white">متجر براند الإلكتروني</p>
                 <p class="text-xs text-gray-500 mt-1">جميع الحقوق محفوظة &copy; 2026</p>
             </div>
-            <!-- أرقام ووسائل التواصل المباشر للزبائن -->
             <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 items-center text-sm">
-                <span class="font-semibold text-gray-400">للتواصل والدعم الفني المباشر:</span>
-                <a href="https://wa.me/972599783984" target="_blank" class="flex items-center gap-2 text-green-400 hover:text-green-300 transition font-medium">
-                    🟢 واتساب: <span dir="ltr">00972599783984</span>
-                </a>
-                <a href="tel:00972599783984" class="flex items-center gap-2 text-blue-400 hover:text-blue-300 transition font-medium">
-                    📞 اتصل بنا: <span dir="ltr">00972599783984</span>
-                </a>
+                <a href="https://wa.me/972599783984" target="_blank" class="text-green-400 font-medium">🟢 واتساب: 00972599783984</a>
+                <a href="tel:00972599783984" class="text-blue-400 font-medium">📞 اتصل بنا: 00972599783984</a>
             </div>
         </div>
     </footer>
 
-    <!-- الجافاسكريبت للتحكم بالبيانات، الأمان، والتنقل -->
     <script>
-        // قاعدة البيانات الافتراضية للباقات والأسعار
         let initialData = {
-            "هوت موبايل": { month_1: 50, month_3: 125 },
-            "بارتنر": { month_1: 50, month_3: 125 },
-            "بيليفون": { month_1: 50, month_3: 135 },
-            "019": { month_1: 50, month_3: 135 },
-            "رامي ليفي": { month_1: 60, month_3: 135 },
-            "ويكوم": { month_1: 50, month_3: 120 },
-            "سيلكوم": { month_1: 50, month_3: 120 },
-            "الوها": { month_1: 50, month_3: 130 }
+            "هوت موبايل": { month_1: 50, month_3: 125 }, "بارتنر": { month_1: 50, month_3: 125 },
+            "بيليفون": { month_1: 50, month_3: 135 }, "019": { month_1: 50, month_3: 135 },
+            "رامي ليفي": { month_1: 60, month_3: 135 }, "ويكوم": { month_1: 50, month_3: 120 },
+            "سيلكوم": { month_1: 50, month_3: 120 }, "الوها": { month_1: 50, month_3: 130 }
         };
 
-        // إدارة كلمة المرور المخزنة (الافتراضية: admin123)
-        let adminPassword = localStorage.getItem('brand_admin_pass') || 'admin123';
-
-        // جلب أسعار المتجر الحالية
         let storeData = JSON.parse(localStorage.getItem('brand_store_prices')) || initialData;
 
-        // دالة لتوليد القوائم والجداول عند تشغيل الصفحة
         function initApp() {
             const carrierSelect = document.getElementById('carrier-select');
-            const adminTableBody = document.getElementById('admin-table-body');
-            
             carrierSelect.innerHTML = '';
-            adminTableBody.innerHTML = '';
-
             for (let carrier in storeData) {
-                // تعبئة قائمة المتجر
                 let option = document.createElement('option');
-                option.value = carrier;
-                option.textContent = carrier;
+                option.value = carrier; option.textContent = carrier;
                 carrierSelect.appendChild(option);
-
-                // تعبئة جدول الأدمن
-                let row = document.createElement('tr');
-                row.className = "border-b border-gray-200 hover:bg-gray-50";
-                row.innerHTML = `
-                    <td class="py-4 px-6 font-semibold text-gray-800">${carrier}</td>
-                    <td class="py-4 px-6">
-                        <input type="number" id="input-${carrier}-m1" value="${storeData[carrier].month_1}" class="w-24 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white">
-                    </td>
-                    <td class="py-4 px-6">
-                        <input type="number" id="input-${carrier}-m3" value="${storeData[carrier].month_3}" class="w-24 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white">
-                    </td>
-                `;
-                adminTableBody.appendChild(row);
             }
             updatePrice();
         }
 
-        // دالة تحديث السعر المعروض في المتجر بناءً على الاختيارات
         function updatePrice() {
             const carrier = document.getElementById('carrier-select').value;
             const duration = document.getElementById('duration-select').value;
-            
             if (storeData[carrier]) {
-                const price = storeData[carrier][duration];
-                document.getElementById('price-display').textContent = price;
+                document.getElementById('price-display').textContent = storeData[carrier][duration];
             }
         }
 
-        // دالة التحقق من كلمة المرور قبل دخول لوحة التحكم
-        function tryAccessAdmin() {
-            const userInput = prompt("الرجاء إدخال كلمة مرور الأدمن للوصول إلى لوحة التحكم:");
-            if (userInput === null) return; // تم إلغاء الأمر من قبل المستخدم
-
-            if (userInput === adminPassword) {
-                switchView('admin');
-            } else {
-                alert("❌ كلمة المرور غير صحيحة! لا تملك صلاحية الدخول.");
-            }
-        }
-
-        // دالة تغيير كلمة المرور من قبل الأدمن
-        function changePassword() {
-            const newPass = document.getElementById('new-password-input').value.trim();
-            if (newPass === "") {
-                alert("الرجاء كتابة كلمة مرور صالحة وغير فارغة!");
-                return;
-            }
-            adminPassword = newPass;
-            localStorage.setItem('brand_admin_pass', newPass);
-            alert("🔒 تم تحديث كلمة مرور لوحة التحكم بنجاح!");
-            document.getElementById('new-password-input').value = "";
-        }
-
-        // دالة حفظ الأسعار الجديدة من لوحة التحكم
-        function savePrices() {
-            for (let carrier in storeData) {
-                const m1Val = document.getElementById(`input-${carrier}-m1`).value;
-                const m3Val = document.getElementById(`input-${carrier}-m3`).value;
-                
-                storeData[carrier].month_1 = Number(m1Val);
-                storeData[carrier].month_3 = Number(m3Val);
-            }
-            localStorage.setItem('brand_store_prices', JSON.stringify(storeData));
-            alert('تم حفظ الأسعار الجديدة بنجاح وتحديث المتجر!');
-            switchView('store');
-            updatePrice();
-        }
-
-        // دالة إرسال الطلب عبر الواتساب للرقم المحدد
         function sendToWhatsApp() {
             const carrier = document.getElementById('carrier-select').value;
             const duration = document.getElementById('duration-select').options[document.getElementById('duration-select').selectedIndex].text;
@@ -248,33 +102,16 @@
             const price = document.getElementById('price-display').textContent;
             const phoneNumber = "972599783984"; 
 
-            const message = `مرحباً، أود طلب الباقة التالية من متجر براند:\n\n` +
-                            `📱 نوع الشريحة: ${carrier}\n` +
-                            `⏳ المدة: ${duration}\n` +
-                            `🏷️ نوع الشريحة: ${type}\n` +
-                            `💰 السعر الإجمالي: ${price} ₪\n\n` +
-                            `بانتظار تأكيد الطلب وطريقة الدفع.`;
-
-            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
+            const message = `مرحباً، أود طلب الباقة التالية من متجر براند:\n\n📱 نوع الشريحة: ${carrier}\n⏳ المدة: ${duration}\n🏷️ نوع الشريحة: ${type}\n💰 السعر الإجمالي: ${price} ₪\n\nبانتظار تأكيد الطلب.`;
+            window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
         }
 
-        // دالة التنقل بين واجهة المتجر ولوحة التحكم
-        function switchView(view) {
-            if (view === 'store') {
-                document.getElementById('store-view').classList.remove('hidden');
-                document.getElementById('admin-view').classList.add('hidden');
-                document.getElementById('nav-store').className = "bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold mx-2 shadow cursor-pointer";
-                document.getElementById('nav-admin').className = "bg-blue-800 hover:bg-blue-900 text-white px-4 py-2 rounded-lg font-semibold mx-2 shadow transition cursor-pointer";
-            } else {
-                document.getElementById('store-view').classList.add('hidden');
-                document.getElementById('admin-view').classList.remove('hidden');
-                document.getElementById('nav-store').className = "bg-blue-800 hover:bg-blue-900 text-white px-4 py-2 rounded-lg font-semibold mx-2 shadow transition cursor-pointer";
-                document.getElementById('nav-admin').className = "bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold mx-2 shadow cursor-pointer";
-            }
-        }
+        // تحديث البيانات تلقائياً لو قام الأدمن بتغييرها من نفس الجهاز
+        window.addEventListener('storage', () => {
+            storeData = JSON.parse(localStorage.getItem('brand_store_prices')) || initialData;
+            updatePrice();
+        });
 
-        // تشغيل التطبيق تلقائياً
         initApp();
     </script>
 </body>
