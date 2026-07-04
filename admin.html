@@ -43,7 +43,7 @@
     <div id="forgot-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl">
             <h3 class="text-lg font-bold text-gray-800 mb-2">🔑 استعادة بيانات الحساب</h3>
-            <p class="text-sm text-gray-600 mb-4">سيتم إرسال اسم المستخدم وكلمة المرور الحالية إلى بريدك الجيميل المعتمد.</p>
+            <p id="forgot-modal-text" class="text-sm text-gray-600 mb-4">سيتم إرسال اسم المستخدم وكلمة المرور الحالية إلى بريدك الجيميل المعتمد.</p>
             
             <div class="space-y-3">
                 <button onclick="sendCredentialsEmail()" id="send-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 rounded-xl transition cursor-pointer">
@@ -59,11 +59,21 @@
     <div id="admin-dashboard" class="container mx-auto max-w-5xl w-full hidden self-start py-6">
         <div class="bg-gradient-to-r from-red-50 to-orange-50 rounded-2xl shadow-md p-6 border border-red-100 mb-8">
             <h3 class="text-lg font-bold text-red-800 mb-2">🔐 تعديل بيانات الأمان والحساب</h3>
-            <p class="text-sm text-gray-600 mb-4">يمكنك تحديث اسم المستخدم وكلمة المرور الخاصة بك من هنا في أي وقت.</p>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <input type="text" id="new-username-input" placeholder="اسم المستخدم الجديد" class="p-3 border border-gray-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-red-400 text-sm">
-                <input type="password" id="new-password-input" placeholder="كلمة المرور الجديدة" class="p-3 border border-gray-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-red-400 text-sm">
-                <button onclick="updateAccountDetails()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-3 rounded-xl transition cursor-pointer">
+            <p class="text-sm text-gray-600 mb-4">يمكنك تحديث اسم المستخدم، كلمة المرور، وحساب الجيميل الخاص باستعادة البيانات من هنا.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">اسم المستخدم الجديد</label>
+                    <input type="text" id="new-username-input" placeholder="اسم المستخدم" class="w-full p-3 border border-gray-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-red-400 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">كلمة المرور الجديدة</label>
+                    <input type="password" id="new-password-input" placeholder="كلمة المرور" class="w-full p-3 border border-gray-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-red-400 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">حساب الجيميل المعتمد</label>
+                    <input type="email" id="new-email-input" placeholder="example@gmail.com" class="w-full p-3 border border-gray-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-red-400 text-sm text-left" dir="ltr">
+                </div>
+                <button onclick="updateAccountDetails()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-3 rounded-xl transition cursor-pointer text-sm h-[46px]">
                     تحديث بيانات الحساب
                 </button>
             </div>
@@ -85,7 +95,7 @@
                         </tr>
                     </thead>
                     <tbody id="admin-table-body" class="text-gray-600 text-sm font-light">
-                        </tbody>
+                    </tbody>
                 </table>
             </div>
 
@@ -98,9 +108,9 @@
     </div>
 
     <script>
-        // تهيئة EmailJS بمفتاحك العام (إذا كنت تستخدم الميزة، استبدل النص بمفتاحك)
+        // تهيئة EmailJS بمفتاحك العام
         (function() {
-            // emailjs.init("YOUR_PUBLIC_KEY"); 
+            emailjs.init("YOUR_PUBLIC_KEY"); // قم باستبدالها بمفتاحك العام من حساب EmailJS الخاص بك
         })();
 
         let initialData = {
@@ -113,12 +123,18 @@
         // جلب البيانات أو تعيين الافتراضية
         let adminUser = localStorage.getItem('brand_admin_user') || 'admin';
         let adminPassword = localStorage.getItem('brand_admin_pass') || 'admin123';
+        let adminEmail = localStorage.getItem('brand_admin_email') || 'admin@gmail.com'; // الإيميل الافتراضي
         let storeData = JSON.parse(localStorage.getItem('brand_store_prices')) || initialData;
 
         // دالة التحكم في إظهار وإخفاء نافذة استعادة البيانات
         function toggleForgotModal(show) {
             const modal = document.getElementById('forgot-modal');
+            const modalText = document.getElementById('forgot-modal-text');
             if (show) {
+                // عرض تلميح مشفر للإيميل لحماية الخصوصية (مثال: a***n@gmail.com)
+                let shadedEmail = adminEmail.replace(/(..)(.*)(@.*)/, '$1***$3');
+                modalText.innerText = `سيتم إرسال اسم المستخدم وكلمة المرور الحالية إلى بريدك المعتمد: (${shadedEmail})`;
+                
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
             } else {
@@ -129,11 +145,18 @@
 
         // دالة إرسال الإيميل بالبيانات الحالية
         function sendCredentialsEmail() {
+            if(!adminEmail || adminEmail.trim() === "") {
+                alert("❌ لم يتم تعيين بريد إلكتروني معتمد في لوحة التحكم بعد!");
+                return;
+            }
+
             const sendBtn = document.getElementById('send-btn');
             sendBtn.innerText = "جاري الإرسال... ⏳";
             sendBtn.disabled = true;
 
+            // تأكد من إضافة المتغير (to_email) داخل الـ Template في EmailJS ووضعه في خانة المستلم (To Email)
             emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
+                to_email: adminEmail,
                 to_username: adminUser,
                 to_password: adminPassword
             })
@@ -149,7 +172,7 @@
             });
         }
 
-        // دالة الدخول (الآن تعمل مباشرة وفوراً بدون قيود الكابتشا)
+        // دالة الدخول
         function handleLogin() {
             const userIn = document.getElementById('login-username').value.trim();
             const passIn = document.getElementById('login-password').value.trim();
@@ -159,6 +182,9 @@
                 document.getElementById('admin-dashboard').classList.remove('hidden');
                 document.body.className = "bg-gray-100 text-gray-800 min-h-screen p-6";
                 initAdminTable();
+                
+                // ملء الحقل بقيمة الإيميل الحالي عند دخول اللوحة
+                document.getElementById('new-email-input').value = adminEmail;
             } else {
                 alert("❌ اسم المستخدم أو كلمة المرور غير صحيحة!");
             }
@@ -179,13 +205,22 @@
             }
         }
 
+        // تحديث الحساب بما في ذلك الجيميل الجديد
         function updateAccountDetails() {
             const newUser = document.getElementById('new-username-input').value.trim();
             const newPass = document.getElementById('new-password-input').value.trim();
-            if (!newUser && !newPass) { alert("الرجاء تعبئة البيانات للتحديث!"); return; }
+            const newEmail = document.getElementById('new-email-input').value.trim();
+            
+            if (!newUser && !newPass && (!newEmail || newEmail === adminEmail)) { 
+                alert("الرجاء تعبئة بيانات جديدة للتحديث!"); 
+                return; 
+            }
+            
             if (newUser) { adminUser = newUser; localStorage.setItem('brand_admin_user', newUser); }
             if (newPass) { adminPassword = newPass; localStorage.setItem('brand_admin_pass', newPass); }
-            alert("🔒 تم تحديث بيانات الحساب بنجاح!");
+            if (newEmail) { adminEmail = newEmail; localStorage.setItem('brand_admin_email', newEmail); }
+            
+            alert("🔒 تم تحديث بيانات الحساب والبريد المعتمد بنجاح!");
             document.getElementById('new-username-input').value = "";
             document.getElementById('new-password-input').value = "";
         }
