@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم الأدمن - متجر براند</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Cairo', sans-serif; }</style>
+</head>
+<body class="bg-gray-100 text-gray-800 p-6 opacity-0 transition-opacity duration-300" id="admin-body">
+
+    <div class="container mx-auto max-w-5xl">
+        <div class="bg-red-50 rounded-2xl shadow-md p-6 border border-red-100 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <h3 class="text-lg font-bold text-red-800">🔐 أمان لوحة التحكم</h3>
+                <p class="text-sm text-gray-600">تعديل كلمة مرور الدخول لهذه الصفحة.</p>
+            </div>
+            <div class="flex gap-2 w-full md:w-auto">
+                <input type="password" id="new-password-input" placeholder="كلمة المرور الجديدة" class="p-2 border border-gray-300 rounded-lg bg-white focus:outline-none text-sm">
+                <button onclick="changePassword()" class="bg-red-600 hover:bg-red-700 text-white font-semibold text-sm px-4 py-2 rounded-lg cursor-pointer">تحديث</button>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-4">🛠️ تعديل أسعار الباقات</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full table-auto text-right">
+                    <thead>
+                        <tr class="bg-gray-100 text-gray-700 text-sm">
+                            <th class="py-3 px-6 rounded-r-lg">الشركة</th>
+                            <th class="py-3 px-6">سعر الشهر (₪)</th>
+                            <th class="py-3 px-6 rounded-l-lg">سعر 3 شهور (₪)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-table-body" class="text-sm"></tbody>
+                </table>
+            </div>
+            <div class="mt-6 flex justify-end">
+                <button onclick="savePrices()" class="bg-green-600 hover:bg-green-700 text-white font-bold px-8 py-3 rounded-xl shadow-md cursor-pointer">حفظ وتحديث المتجر</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let initialData = {
+            "هوت موبايل": { month_1: 50, month_3: 125 }, "بارتنر": { month_1: 50, month_3: 125 },
+            "بيليفون": { month_1: 50, month_3: 135 }, "019": { month_1: 50, month_3: 135 },
+            "رامي ليفي": { month_1: 60, month_3: 135 }, "ويكوم": { month_1: 50, month_3: 120 },
+            "سيلكوم": { month_1: 50, month_3: 120 }, "الوها": { month_1: 50, month_3: 130 }
+        };
+
+        let adminPassword = localStorage.getItem('brand_admin_pass') || 'admin123';
+        let storeData = JSON.parse(localStorage.getItem('brand_store_prices')) || initialData;
+
+        // التحقق من الحماية فوراً قبل إظهار الصفحة
+        function checkAccess() {
+            const userInput = prompt("الرجاء إدخال كلمة مرور الأدمن:");
+            if (userInput === adminPassword) {
+                document.getElementById('admin-body').classList.remove('opacity-0');
+                initAdmin();
+            } else {
+                alert("❌ كلمة المرور خاطئة!");
+                window.location.href = "index.html"; // طرد المستخدم للمتجر
+            }
+        }
+
+        function initAdmin() {
+            const adminTableBody = document.getElementById('admin-table-body');
+            adminTableBody.innerHTML = '';
+            for (let carrier in storeData) {
+                let row = document.createElement('tr');
+                row.className = "border-b border-gray-200 hover:bg-gray-50";
+                row.innerHTML = `
+                    <td class="py-4 px-6 font-semibold">${carrier}</td>
+                    <td class="py-4 px-6"><input type="number" id="input-${carrier}-m1" value="${storeData[carrier].month_1}" class="w-24 p-2 border rounded-lg bg-white"></td>
+                    <td class="py-4 px-6"><input type="number" id="input-${carrier}-m3" value="${storeData[carrier].month_3}" class="w-24 p-2 border rounded-lg bg-white"></td>
+                `;
+                adminTableBody.appendChild(row);
+            }
+        }
+
+        function changePassword() {
+            const newPass = document.getElementById('new-password-input').value.trim();
+            if(!newPass) return alert("اكتب كلمة مرور صالحة");
+            localStorage.setItem('brand_admin_pass', newPass);
+            adminPassword = newPass;
+            alert("🔒 تم تغيير كلمة المرور بنجاح!");
+            document.getElementById('new-password-input').value = "";
+        }
+
+        function savePrices() {
+            for (let carrier in storeData) {
+                storeData[carrier].month_1 = Number(document.getElementById(`input-${carrier}-m1`).value);
+                storeData[carrier].month_3 = Number(document.getElementById(`input-${carrier}-m3`).value);
+            }
+            localStorage.setItem('brand_store_prices', JSON.stringify(storeData));
+            alert('تم حفظ الأسعار الجديدة بنجاح!');
+        }
+
+        checkAccess();
+    </script>
+</body>
+</html>
