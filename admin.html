@@ -6,13 +6,11 @@
     <title>لوحة تحكم الأدمن - متجر براند</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- 1. استدعاء مكتبة كلاود فلير ترنستايل -->
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <style>body { font-family: 'Cairo', sans-serif; }</style>
 </head>
 <body class="bg-gray-100 text-gray-800 min-h-screen flex items-center justify-center p-4">
 
-    <!-- 1. واجهة نموذج تسجيل الدخول (تظهر أولاً) -->
     <div id="login-card" class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full border border-gray-100">
         <div class="text-center mb-6">
             <div class="text-4xl mb-2">🔐</div>
@@ -30,10 +28,8 @@
                 <input type="password" id="login-password" placeholder="••••••••" class="w-full p-3 border border-gray-300 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 text-left" dir="ltr">
             </div>
 
-            <!-- 2. حاوية الكابتشا (ستظهر هنا تلقائياً) -->
             <div class="flex justify-center my-2">
-                <!-- استبدل YOUR_SITE_KEY بالـ Key الخاص بك من حساب كلاود فلير -->
-                <div class="cf-turnstile" data-sitekey="YOUR_SITE_KEY" data-callback="onTurnstileSuccess"></div>
+                <div class="cf-turnstile" data-sitekey="0x4AAAAAADvgZiVMTl59Zpv4" data-callback="onTurnstileSuccess"></div>
             </div>
 
             <button onclick="handleLogin()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg transition transform hover:-translate-y-0.5 cursor-pointer mt-2">
@@ -42,9 +38,7 @@
         </div>
     </div>
 
-    <!-- 2. محتوى لوحة التحكم (مخفي افتراضياً ويظهر بعد نجاح الدخول) -->
     <div id="admin-dashboard" class="container mx-auto max-w-5xl w-full hidden self-start py-6">
-        <!-- قِسم إدارة الحساب والأمان والتعديل -->
         <div class="bg-gradient-to-r from-red-50 to-orange-50 rounded-2xl shadow-md p-6 border border-red-100 mb-8">
             <h3 class="text-lg font-bold text-red-800 mb-2">🔐 تعديل بيانات الأمان والحساب</h3>
             <p class="text-sm text-gray-600 mb-4">يمكنك تحديث اسم المستخدم وكلمة المرور الخاصة بك من هنا في أي وقت.</p>
@@ -57,7 +51,6 @@
             </div>
         </div>
 
-        <!-- جدول الأسعار للباقات -->
         <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
             <div class="flex justify-between items-center mb-6 border-b pb-4">
                 <h2 class="text-2xl font-bold text-gray-800">🛠️ تعديل أسعار الباقات في المتجر</h2>
@@ -74,8 +67,7 @@
                         </tr>
                     </thead>
                     <tbody id="admin-table-body" class="text-gray-600 text-sm font-light">
-                        <!-- سيتم توليدها عبر جافاسكريبت -->
-                    </tbody>
+                        </tbody>
                 </table>
             </div>
 
@@ -113,7 +105,7 @@
 
         // دالة التحقق من بيانات تسجيل الدخول للواجهة المحدثة
         function handleLogin() {
-            // 3. التحقق أولاً إذا كان المستخدم قد تخطى الكابتشا بنجاح
+            // التحقق أولاً إذا كان المستخدم قد تخطى الكابتشا بنجاح
             if (!isCaptchaVerified) {
                 alert("⚠️ الرجاء التحقق من اختبار الكابتشا أولاً!");
                 return;
