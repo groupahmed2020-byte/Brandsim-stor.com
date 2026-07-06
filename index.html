@@ -3,212 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متجر براند الإلكتروني</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>موقع أحمد الأخباري | Ahmad News</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>body { font-family: 'Cairo', sans-serif; }</style>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gray-50 text-gray-800 dark:bg-gray-950 dark:text-gray-100 flex flex-col min-h-screen transition-colors duration-300">
+<body>
 
-    <!-- شريط التنقل / الهيدر -->
-    <header class="bg-gradient-to-r from-blue-600 to-indigo-700 dark:from-blue-900 dark:to-slate-900 text-white shadow-lg">
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <h1 class="text-2xl font-bold tracking-wide">🛒 متجر براند الإلكتروني</h1>
+    <div id="public-site">
+        <header>
+            <div class="container header-content">
+                <div class="logo">أحمد الأخباري <span>Ahmad News</span></div>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="#" onclick="filterNews('all')">الرئيسية</a></li>
+                        <li><a href="#" onclick="filterNews('politics')">سياسة</a></li>
+                        <li><a href="#" onclick="filterNews('economy')">اقتصاد</a></li>
+                        <li><a href="#" onclick="filterNews('local')">محليات</a></li>
+                        <li><a href="#" onclick="filterNews('studies')">الدراسات والأبحاث</a></li>
+                        <li><a href="#" onclick="filterNews('english')">English News</a></li>
+                    </ul>
+                </nav>
+                <div class="header-actions">
+                    <button id="theme-toggle">🌙/☀️</button>
+                    <button class="login-btn" onclick="showLogin()">تسجيل الدخول</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="ticker-wrap">
+            <div class="ticker-heading">عاجل</div>
+            <div class="ticker">
+                <div class="ticker-item">هذا النص يتحرك بشكل معكوس كما طلبت...</div>
+                <div class="ticker-item">تحديثات جديدة في قسم الدراسات والأبحاث...</div>
+                <div class="ticker-item">Breaking News: Welcome to Ahmad News English Section...</div>
+            </div>
         </div>
-    </header>
 
-    <!-- المحتوى الرئيسي -->
-    <div class="flex-grow">
-        <main class="container mx-auto px-4 py-12 max-w-4xl">
-            <!-- صندوق طلب الباقة الرئيسي -->
-            <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-gray-800 transition-colors duration-300">
-                <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-gray-100 mb-8">احصل على باقتك الرقمية فوراً</h2>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                    <!-- اختيار الشركة -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">1. الشركة المزودة</label>
-                        <select id="carrier-select" onchange="updatePrice()" class="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:outline-none bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-100"></select>
+        <main class="container main-layout">
+            <section class="news-section">
+                <article class="featured-news" data-category="politics">
+                    <img src="https://via.placeholder.com/800x400" alt="خبر رئيسي">
+                    <div class="news-content">
+                        <span class="badge">سياسة</span>
+                        <h2>عنوان الخبر الرئيسي يكتب هنا بتفاصيل مهمة</h2>
+                        <p>مقدمة مختصرة عن الخبر الرئيسي لجذب انتباه القارئ ومتابعة التفاصيل...</p>
                     </div>
-                    <!-- اختيار مدة الباقة -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">2. مدة الباقة</label>
-                        <select id="duration-select" onchange="updatePrice()" class="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:outline-none bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-100">
-                            <option value="month_1">شهر واحد</option>
-                            <option value="month_3">3 شهور</option>
-                        </select>
+                </article>
+
+                <div class="news-grid" id="news-grid">
                     </div>
-                    <!-- اختيار نوع الشريحة -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">3. نوع الشريحة المفضل</label>
-                        <select id="type-select" onchange="updatePrice(); toggleLocation()" class="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:outline-none bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-100">
-                            <option value="physical">شريحة تقليدية (Physical SIM)</option>
-                            <option value="esim">شريحة إلكترونية (eSIM)</option>
-                        </select>
-                    </div>
+            </section>
+
+            <aside class="sidebar">
+                <div class="widget">
+                    <h3>حالة الطقس ⛅</h3>
+                    <p>غزة: 25°C - مشمس</p>
                 </div>
-
-                <!-- حقل اختيار المكان (يظهر فقط عند اختيار شريحة تقليدية) -->
-                <div id="location-container" class="mb-8 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700 transition-all duration-300">
-                    <label class="block text-sm font-bold text-blue-700 dark:text-blue-400 mb-2">📍 يرجى تحديد منطقة التواجد لاستلام الشريحة:</label>
-                    <select id="location-select" class="w-full md:w-1/2 p-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100">
-                        <option value="غزة">غزة</option>
-                        <option value="السرايا">السرايا</option>
-                        <option value="البريج">البريج</option>
-                        <option value="التفاح">التفاح</option>
-                        <option value="الشيخ رضوان (الشيخ رضوان)">الشيخ رضوان (الشيخ رضوان)</option>
-                        <option value="الزيتون">الزيتون</option>
-                        <option value="الشاطئ">الشاطئ</option>
-                        <option value="القرارة">القرارة</option>
-                        <option value="المغازي">المغازي</option>
-                        <option value="النصر">النصر</option>
-                        <option value="النصيرات">النصيرات</option>
-                        <option value="بيت لاهيا">بيت لاهيا</option>
-                        <option value="جباليا">جباليا</option>
-                        <option value="خانيونس">خانيونس</option>
-                        <option value="دير البلح">دير البلح</option>
-                        <option value="مدينة حمد">مدينة حمد</option>
-                    </select>
+                <div class="widget">
+                    <h3>مواقيت الصلاة 🕌</h3>
+                    <ul>
+                        <li>الفجر: 4:30 ص</li>
+                        <li>الظهر: 12:45 م</li>
+                        <li>العصر: 4:20 م</li>
+                    </ul>
                 </div>
-
-                <!-- عرض السعر وزر الشراء -->
-                <div class="bg-blue-50 dark:bg-blue-950/40 rounded-xl p-6 text-center border border-blue-100 dark:border-blue-900/50 my-8 transition-colors duration-300">
-                    <p class="text-gray-600 dark:text-gray-400 text-lg mb-1">السعر الإجمالي</p>
-                    <div class="text-4xl font-black text-blue-600 dark:text-blue-400 mb-4"><span id="price-display">0</span> ₪</div>
-                    <button onclick="sendToWhatsApp()" class="w-full md:w-auto bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white font-bold text-lg px-12 py-3 rounded-xl shadow-lg cursor-pointer transform transition active:scale-95">
-                        اشترِ الآن عبر واتساب 📲
-                    </button>
-                </div>
-            </div>
-
-            <!-- قسم طرق الدفع -->
-            <div class="mt-12 bg-white dark:bg-gray-900 rounded-2xl shadow-md p-6 border border-gray-100 dark:border-gray-800 text-center transition-colors duration-300">
-                <h3 class="text-lg font-bold text-gray-700 dark:text-gray-300 mb-6 flex items-center justify-center gap-2">
-                    💳 طرق الدفع المتاحة والمقبولة لدينا
-                </h3>
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 items-center justify-center">
-                    
-                    <div class="flex flex-col items-center justify-center p-4 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/40">
-                        <div class="w-12 h-12 rounded-full bg-orange-500 text-white flex items-center justify-center font-black text-xs shadow-sm mb-2 select-none tracking-tighter">BOP</div>
-                        <span class="text-xs font-bold text-gray-600 dark:text-gray-400">بنك فلسطين</span>
-                    </div>
-
-                    <div class="flex flex-col items-center justify-center p-4 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/40">
-                        <div class="w-12 h-12 rounded-full bg-amber-400 text-slate-900 flex items-center justify-center text-lg shadow-sm mb-2 font-black select-none">🔶</div>
-                        <span class="text-xs font-bold text-gray-600 dark:text-gray-400">BINANCE (USDT)</span>
-                    </div>
-
-                    <div class="flex flex-col items-center justify-center p-4 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/40">
-                        <div class="w-12 h-12 rounded-full bg-emerald-600 text-white flex items-center justify-center font-black text-base shadow-sm mb-2 select-none">جوال</div>
-                        <span class="text-xs font-bold text-gray-600 dark:text-gray-400">جوال بي (Jawwal Pay)</span>
-                    </div>
-
-                    <div class="flex flex-col items-center justify-center p-4 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/40">
-                        <div class="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs shadow-sm mb-2 select-none">PalPay</div>
-                        <span class="text-xs font-bold text-gray-600 dark:text-gray-400">بال بي (PalPay)</span>
-                    </div>
-
-                </div>
-            </div>
+            </aside>
         </main>
     </div>
 
-    <!-- تذييل الصفحة / الفوتر -->
-    <footer class="bg-gray-900 text-gray-300 py-8 border-t border-gray-800 mt-auto dark:bg-black">
-        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div>
-                <p class="font-bold text-lg text-white">متجر براند الإلكتروني</p>
-                <p class="text-xs text-gray-500 mt-1">جميع الحقوق محفوظة &copy; 2026</p>
-            </div>
-            <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 items-center text-sm">
-                <span class="font-semibold text-gray-400">للتواصل والدعم الفني المباشر:</span>
-                <a href="https://wa.me/972599783984" target="_blank" class="text-green-400 hover:text-green-300 font-medium transition">🟢 واتساب: 00972599783984</a>
-                <a href="tel:00972599783984" class="text-blue-400 hover:text-blue-300 font-medium transition">📞 اتصل بنا: 00972599783984</a>
-            </div>
+    <div id="login-portal" class="hidden">
+        <div class="login-box">
+            <h2>تسجيل الدخول للإدارة</h2>
+            <form id="login-form">
+                <input type="text" id="username" placeholder="اسم المستخدم" required>
+                <input type="password" id="password" placeholder="كلمة المرور" required>
+                <button type="submit" class="btn-primary">دخول</button>
+                <button type="button" class="btn-secondary" onclick="hideLogin()">عودة للموقع</button>
+            </form>
         </div>
-    </footer>
+    </div>
 
-    <!-- البرمجة (JavaScript) -->
-    <script>
-        const initialData = {
-            "هوت موبايل": { month_1: 50, month_3: 125 }, 
-            "بارتنر": { month_1: 50, month_3: 125 },
-            "بيليفون": { month_1: 50, month_3: 135 }, 
-            "019": { month_1: 50, month_3: 135 },
-            "رامي ليفي": { month_1: 60, month_3: 135 }, 
-            "ويكوم": { month_1: 50, month_3: 120 },
-            "سيلكوم": { month_1: 50, month_3: 120 }, 
-            "الوها": { month_1: 50, month_3: 130 }
-        };
+    <div id="admin-dashboard" class="hidden">
+        <header class="admin-header">
+            <h2>لوحة التحكم | موقع أحمد الأخباري</h2>
+            <div>
+                <span id="admin-user-name">مرحباً</span>
+                <button class="btn-secondary" onclick="logout()">تسجيل خروج</button>
+            </div>
+        </header>
 
-        let storeData = JSON.parse(localStorage.getItem('brand_store_prices')) || initialData;
+        <div class="admin-layout">
+            <aside class="admin-sidebar">
+                <ul>
+                    <li onclick="switchAdminTab('manage-posts')">📝 إدارة الأخبار</li>
+                    <li onclick="switchAdminTab('manage-users')">👥 إدارة الأعضاء (للمدير فقط)</li>
+                    <li onclick="switchAdminTab('admin-settings')">⚙️ إعدادات الحساب</li>
+                </ul>
+            </aside>
 
-        function initApp() {
-            const carrierSelect = document.getElementById('carrier-select');
-            carrierSelect.innerHTML = '';
-            
-            for (let carrier in storeData) {
-                let option = document.createElement('option');
-                option.value = carrier; 
-                option.textContent = carrier;
-                carrierSelect.appendChild(option);
-            }
-            updatePrice();
-            toggleLocation(); // لضبط إظهار/إخفاء حقل المكان عند تحميل الصفحة
-        }
+            <main class="admin-content">
+                <section id="manage-posts">
+                    <h3>إضافة/تعديل خبر</h3>
+                    <form class="admin-form">
+                        <input type="text" placeholder="عنوان الخبر" required>
+                        <textarea rows="5" placeholder="محتوى الخبر" required></textarea>
+                        
+                        <select required>
+                            <option value="">اختر القسم...</option>
+                            <option value="politics">سياسة</option>
+                            <option value="economy">اقتصاد</option>
+                            <option value="local">محليات</option>
+                            <option value="studies">الدراسات والأبحاث</option>
+                            <option value="english">English News</option>
+                        </select>
+                        
+                        <select>
+                            <option value="published">منشور</option>
+                            <option value="draft">مسودة</option>
+                            <option value="urgent">عاجل</option>
+                        </select>
 
-        function updatePrice() {
-            const carrier = document.getElementById('carrier-select').value;
-            const duration = document.getElementById('duration-select').value;
-            
-            if (storeData[carrier] && storeData[carrier][duration] !== undefined) {
-                document.getElementById('price-display').textContent = storeData[carrier][duration];
-            } else {
-                document.getElementById('price-display').textContent = "0";
-            }
-        }
+                        <div class="upload-section">
+                            <h4>المرفقات (صورة / فيديو / مستندات)</h4>
+                            <label>من الجهاز (هاتف/حاسوب):</label>
+                            <input type="file" accept="image/*,video/*,.pdf,.doc,.docx" multiple>
+                            
+                            <label>من رابط خارجي:</label>
+                            <input type="url" placeholder="أدخل رابط الملف أو الصورة الخارجي">
+                        </div>
 
-        // دالة جديدة لإظهار/إخفاء حقل المكان حسب نوع الشريحة
-        function toggleLocation() {
-            const type = document.getElementById('type-select').value;
-            const locationContainer = document.getElementById('location-container');
-            
-            if (type === 'physical') {
-                locationContainer.style.display = 'block';
-            } else {
-                locationContainer.style.display = 'none';
-            }
-        }
+                        <button type="submit" class="btn-primary">نشر / حفظ الخبر</button>
+                    </form>
 
-        function sendToWhatsApp() {
-            const carrier = document.getElementById('carrier-select').value;
-            const duration = document.getElementById('duration-select').options[document.getElementById('duration-select').selectedIndex].text;
-            
-            const typeSelect = document.getElementById('type-select');
-            const typeValue = typeSelect.value;
-            const typeText = typeSelect.options[typeSelect.selectedIndex].text;
-            
-            const price = document.getElementById('price-display').textContent;
-            const phoneNumber = "972599783984"; 
+                    <hr>
+                    <h3>الأخبار الحالية (إدارة)</h3>
+                    <table class="admin-table">
+                        <tr>
+                            <th>العنوان</th>
+                            <th>القسم</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                        <tr>
+                            <td>تحليل اقتصادي جديد</td>
+                            <td>الدراسات والأبحاث</td>
+                            <td>
+                                <button class="btn-edit">تعديل</button>
+                                <button class="btn-delete">حذف</button>
+                            </td>
+                        </tr>
+                    </table>
+                </section>
 
-            // إضافة مكان التواجد للرسالة فقط إذا كانت الشريحة تقليدية
-            let locationInfo = "";
-            if (typeValue === 'physical') {
-                const location = document.getElementById('location-select').value;
-                locationInfo = `\n📍 منطقة التواجد للاستلام: ${location}`;
-            }
+                <section id="manage-users" class="hidden">
+                    <h3>إدارة الأعضاء والصلاحيات</h3>
+                    <form class="admin-form">
+                        <input type="text" placeholder="اسم العضو الجديد">
+                        <input type="password" placeholder="كلمة المرور">
+                        <select>
+                            <option value="editor">عضو/محرر (نشر وتعديل الأخبار فقط)</option>
+                            <option value="admin">مدير (صلاحيات كاملة)</option>
+                        </select>
+                        <button type="submit" class="btn-primary">إضافة عضو</button>
+                    </form>
+                    <table class="admin-table mt-2">
+                        <tr>
+                            <th>الاسم</th>
+                            <th>الصلاحية</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                        <tr>
+                            <td>محرر 1</td>
+                            <td>عضو</td>
+                            <td>
+                                <button class="btn-edit">تعديل</button>
+                                <button class="btn-delete">حذف</button>
+                            </td>
+                        </tr>
+                    </table>
+                </section>
 
-            const message = `مرحباً، أود طلب الباقة التالية من متجر براند:\n\n📱 شركة الاتصال: ${carrier}\n⏳ المدة: ${duration}\n🏷️ نوع الشريحة: ${typeText}${locationInfo}\n💰 السعر الإجمالي: ${price} ₪\n\nبانتظار تأكيد الطلب وطريقة الدفع.`;
-            
-            window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
-        }
+                <section id="admin-settings" class="hidden">
+                    <h3>إعدادات حساب المدير</h3>
+                    <form class="admin-form">
+                        <input type="text" placeholder="اسم المستخدم الجديد">
+                        <input type="password" placeholder="كلمة المرور الجديدة">
+                        <button type="submit" class="btn-primary">حفظ التعديلات</button>
+                    </form>
+                </section>
+            </main>
+        </div>
+    </div>
 
-        window.addEventListener('storage', () => {
-            storeData = JSON.parse(localStorage.getItem('brand_store_prices')) || initialData;
-            updatePrice();
-        });
-
-        initApp();
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
